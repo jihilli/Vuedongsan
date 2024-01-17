@@ -23,16 +23,31 @@
           1) 속성 - :속성="데이터이름"
           2) HTML 내 - {{ 데이터이름 }} -->
     <div v-for="(product, i) in products" :key="i">
-        <img src="./assets/images/room0.jpg" class="room-img" />
+        <img :src="getImagePath(i)" class="room-img" />
         <h4 :style="스타일" @click="모달창열렸니 = true">{{ product }}</h4>
         <p>{{ prices[i] }}만원</p>
         <!-- 이벤트리스너 : (1) v-on:click="" / (2) @click="" 
         -> 작성할 코드가 길어지면, script 내 함수 작성 후, 함수를 집어넣기-->
         <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ 신고수[i] }}</span>
     </div>
+    <hr />
+    <!-- 데려온 데이터 활용하기 -->
+    <div v-for="a in 원룸들" :key="a">
+        <img :src="a.image" class="room-img" />
+        <h4>{{ a.title }}</h4>
+        <p>{{ a.price }}원</p>
+    </div>
+    <!-- <div>
+        <img :src="원룸들[0].image" class="room-img" />
+        <h4>{{ 원룸들[0].title }}</h4>
+        <p>{{ 원룸들[0].price }}원</p>
+    </div> -->
 </template>
 
 <script>
+// import { apple, apple2 } from "./assets/utils/exampleData.js";
+import data from "./assets/utils/data";
+
 export default {
     name: "App",
     // vue의 데이터 보관함 - object 자료 형식으로 저장 (React의 state)
@@ -46,6 +61,8 @@ export default {
             신고수: [0, 0, 0],
             // 모달창 관련 데이터
             모달창열렸니: false,
+            // 데이터 관련 데이터
+            원룸들: data,
         };
     },
     // 함수 만드는 공간
@@ -53,6 +70,11 @@ export default {
         increase(i) {
             // this. : data 안에 있는 데이터를 가져다가 함수를 만들기 위해 반드시 써야 함
             this.신고수[i]++;
+        },
+        getImagePath(index) {
+            return require(`./assets/images/room${index}.jpg`);
+            // require 함수 : 주어진 모듈(ex. 이미지)을 동적으로 가져오는 데 사용
+            // <- require 함수 없이 사용하면 엑박 뜸 ,,
         },
     },
     components: {},
