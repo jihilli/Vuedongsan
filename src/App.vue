@@ -9,42 +9,43 @@
           -> 변수 작명 2개까지 가능 : (array내 데이터, 1씩 증가하는 정수)  -->
         <a v-for="(작명, i) in 메뉴들" :key="i">{{ 작명 }}</a>
     </div>
+
+    <!-- 모달창 만들기 -->
+    <div class="black-bg" v-if="모달창열렸니 == true">
+        <div class="white-bg">
+            <h4>상세페이지</h4>
+            <p>상세페이지 내용</p>
+            <button @click="모달창열렸니 = false">X</button>
+        </div>
+    </div>
+
     <!-- 데이터바인딩(데이터 집어넣기) 
           1) 속성 - :속성="데이터이름"
           2) HTML 내 - {{ 데이터이름 }} -->
     <div v-for="(product, i) in products" :key="i">
-        <h4 :style="스타일">{{ product }}</h4>
+        <img src="./assets/images/room0.jpg" class="room-img" />
+        <h4 :style="스타일" @click="모달창열렸니 = true">{{ product }}</h4>
         <p>{{ prices[i] }}만원</p>
         <!-- 이벤트리스너 : (1) v-on:click="" / (2) @click="" 
         -> 작성할 코드가 길어지면, script 내 함수 작성 후, 함수를 집어넣기-->
         <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ 신고수[i] }}</span>
-    </div>
-    <hr />
-    <div>
-        <h4>{{ products[0] }}</h4>
-        <p>{{ prices[0] }}</p>
-    </div>
-    <div>
-        <h4>{{ products[1] }}</h4>
-        <p>{{ prices[1] }}</p>
-    </div>
-    <div>
-        <h4>{{ products[2] }}</h4>
-        <p>{{ prices[2] }}</p>
     </div>
 </template>
 
 <script>
 export default {
     name: "App",
-    // vue의 데이터 보관함 - object 자료 형식으로 저장
+    // vue의 데이터 보관함 - object 자료 형식으로 저장 (React의 state)
     data() {
         return {
             스타일: "color : blue",
             메뉴들: ["Home", "Shop", "About"],
+            // 제품 관련 데이터
             products: ["역삼동원룸", "천호동원룸", "마포구원룸"],
             prices: [60, 70, 80],
             신고수: [0, 0, 0],
+            // 모달창 관련 데이터
+            모달창열렸니: false,
         };
     },
     // 함수 만드는 공간
@@ -59,15 +60,35 @@ export default {
 </script>
 
 <style>
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+/* 동적인 UI 만드는 법
+  0. HTMK CSS로 디자인 먼저 해주기
+  1. UI의 현재 상태를 데이터로 저장해두기
+  2. 데이터에 따라 UI가 어떻게 보일지 작성 */
+body {
+    margin: 0;
 }
 
-/* 상단 Nav 메뉴 만들기  */
+div {
+    box-sizing: border-box;
+}
+
+.black-bg {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    padding: 20px;
+}
+
+/* 모달창 */
+.white-bg {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* 상단 Nav 메뉴  */
 .menu {
     background: darkslateblue;
     padding: 15px;
@@ -77,6 +98,12 @@ export default {
 .menu a {
     color: white;
     padding: 15px;
+}
+
+/* 이미지 */
+.room-img {
+    width: 100%;
+    margin-top: 40px;
 }
 </style>
 
