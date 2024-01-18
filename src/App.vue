@@ -6,25 +6,28 @@
            -> 1) 자료 안의 데이터 갯수만큼 반복
               2) 작성한 변수(ex.작명)는 데이터(ex.메뉴들)안의 자료가 됨
           3. <태그 v-for="(작명,i) in 데이터명" :key="i">
-          -> 변수 작명 2개까지 가능 : (array내 데이터, 1씩 증가하는 정수)  -->
+           -> 변수 작명 2개까지 가능 : (array내 데이터, 1씩 증가하는 정수)  -->
         <a v-for="(작명, i) in 메뉴들" :key="i">{{ 작명 }}</a>
     </div>
 
-    <!-- 모달창 만들기 -->
-    <div class="black-bg" v-if="모달창열렸니 == true">
-        <div class="white-bg">
-            <h4>상세페이지</h4>
-            <p>상세페이지 내용</p>
-            <button @click="모달창열렸니 = false">X</button>
-        </div>
-    </div>
+    <!-- <조건식 > 
+    <div v-if="조건식">안녕하세요</div>
+    <div v-else-if="조건식2">안녕하세요2</div>
+    <div v-else>안녕하세요2</div> -->
+
+    <!-- 모달창 : components & props 
+    1. 데이터 보내기 - <자식 :데이터이름(작명)="데이터이름">
+        * :(콜론)의 역할? 1) 속성에서 데이터 바인딩 2)props 보내주기 (v-bind)
+    2. 자식컴포넌트는 props로 받은 걸 data에 등록해주기
+** props로 보내준 데이터는 read-only이므로, 자식컴포넌트가 받아온 props 수정하면 큰일 남! -->
+    <ModalVue v-bind:원룸들="원룸들" :누른거="누른거" :모달창열렸니="모달창열렸니" />
 
     <!-- 데이터바인딩(데이터 집어넣기) 
           1) 속성 - :속성="데이터이름"
           2) HTML 내 - {{ 데이터이름 }} -->
     <div v-for="(product, i) in products" :key="i">
         <img :src="getImagePath(i)" class="room-img" />
-        <h4 :style="스타일" @click="모달창열렸니 = true">{{ product }}</h4>
+        <h4 :style="스타일" @click="selectProduct(i)">{{ product }}</h4>
         <p>{{ prices[i] }}만원</p>
         <!-- 이벤트리스너 : (1) v-on:click="" / (2) @click="" 
         -> 작성할 코드가 길어지면, script 내 함수 작성 후, 함수를 집어넣기-->
@@ -32,10 +35,11 @@
     </div>
     <hr />
     <!-- 데려온 데이터 활용하기 -->
-    <div v-for="a in 원룸들" :key="a">
-        <img :src="a.image" class="room-img" />
-        <h4>{{ a.title }}</h4>
-        <p>{{ a.price }}원</p>
+    <div v-for="(원룸, i) in 원룸들" :key="i">
+        <img :src="원룸.image" class="room-img" />
+        <h4 @click="selectProduct(i)">{{ 원룸들[i].title }}</h4>
+        <p>{{ 원룸.price }}원</p>
+        <button @click="increase2[i]">허위매물신고</button> <span>신고수 : {{ 신고수2[i] }}</span>
     </div>
     <!-- <div>
         <img :src="원룸들[0].image" class="room-img" />
@@ -47,6 +51,8 @@
 <script>
 // import { apple, apple2 } from "./assets/utils/exampleData.js";
 import data from "./assets/utils/data";
+// import 컴포넌트
+import ModalVue from "./components/ModalVue.vue";
 
 export default {
     name: "App",
@@ -59,10 +65,11 @@ export default {
             products: ["역삼동원룸", "천호동원룸", "마포구원룸"],
             prices: [60, 70, 80],
             신고수: [0, 0, 0],
+            신고수2: [],
             // 모달창 관련 데이터
             모달창열렸니: false,
-            // 데이터 관련 데이터
             원룸들: data,
+            누른거: 0,
         };
     },
     // 함수 만드는 공간
@@ -71,19 +78,29 @@ export default {
             // this. : data 안에 있는 데이터를 가져다가 함수를 만들기 위해 반드시 써야 함
             this.신고수[i]++;
         },
+        increase2(i) {
+            this.신고수2[i]++;
+        },
         getImagePath(index) {
             return require(`./assets/images/room${index}.jpg`);
             // require 함수 : 주어진 모듈(ex. 이미지)을 동적으로 가져오는 데 사용
             // <- require 함수 없이 사용하면 엑박 뜸 ,,
         },
+        selectProduct(i) {
+            this.모달창열렸니 = true;
+            this.누른거 = i;
+        },
     },
-    components: {},
+    // Script에서 import한 컴포넌트 등록하는 공간
+    components: {
+        ModalVue: ModalVue,
+    },
 };
 </script>
 
 <style>
 /* 동적인 UI 만드는 법
-  0. HTMK CSS로 디자인 먼저 해주기
+  0. HTML CSS로 디자인 먼저 해주기
   1. UI의 현재 상태를 데이터로 저장해두기
   2. 데이터에 따라 UI가 어떻게 보일지 작성 */
 body {
