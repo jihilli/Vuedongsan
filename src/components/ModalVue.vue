@@ -8,6 +8,7 @@
             <DiscountBanner />
             <!-- ** props로 받아온 데이터는 read-only이므로, 받아온 거 수정하면 큰일 남! -->
             <!-- <button @click="모달창열렸니 = false">X</button> -->
+            <button @click="$emit('closeModal', false)">X</button>
         </div>
     </div>
 </template>
