@@ -22,6 +22,13 @@
 ** props로 보내준 데이터는 read-only이므로, 자식컴포넌트가 받아온 props 수정하면 큰일 남! -->
     <ModalVue v-bind:원룸들="원룸들" :누른거="누른거" :모달창열렸니="모달창열렸니" />
 
+    <!-- 데려온 데이터 활용하기 -->
+    <!-- <CardVue :원룸="원룸들[0]" />
+              ...
+    <CardVue :원룸="원룸들[5]" /> -->
+    <CardVue :원룸="원룸들[i]" v-for="(작명, i) in 원룸들" :key="작명" />
+    <hr />
+
     <!-- 데이터바인딩(데이터 집어넣기) 
           1) 속성 - :속성="데이터이름"
           2) HTML 내 - {{ 데이터이름 }} -->
@@ -33,14 +40,7 @@
         -> 작성할 코드가 길어지면, script 내 함수 작성 후, 함수를 집어넣기-->
         <button @click="increase(i)">허위매물신고</button> <span>신고수 : {{ 신고수[i] }}</span>
     </div>
-    <hr />
-    <!-- 데려온 데이터 활용하기 -->
-    <div v-for="(원룸, i) in 원룸들" :key="i">
-        <img :src="원룸.image" class="room-img" />
-        <h4 @click="selectProduct(i)">{{ 원룸들[i].title }}</h4>
-        <p>{{ 원룸.price }}원</p>
-        <button @click="increase2[i]">허위매물신고</button> <span>신고수 : {{ 신고수2[i] }}</span>
-    </div>
+
     <!-- <div>
         <img :src="원룸들[0].image" class="room-img" />
         <h4>{{ 원룸들[0].title }}</h4>
@@ -53,6 +53,7 @@
 import data from "./assets/utils/data";
 // import 컴포넌트
 import ModalVue from "./components/ModalVue.vue";
+import CardVue from "./components/CardVue.vue";
 
 export default {
     name: "App",
@@ -94,6 +95,7 @@ export default {
     // Script에서 import한 컴포넌트 등록하는 공간
     components: {
         ModalVue: ModalVue,
+        CardVue: CardVue,
     },
 };
 </script>
