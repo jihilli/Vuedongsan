@@ -8,10 +8,12 @@
     <div>
         <img :src="원룸.image" class="room-img" />
         <!-- custom event 
-            $emit('작명', 보낼 데이터) - 자식 -> 부모 데이터 바꾸고 싶을 때(부모에게 메세지 보낼 때) 사용! 
+            $emit('작명', 보낼 데이터) / $emit('함수명')
+            - 자식 -> 부모 데이터 바꾸고 싶을 때(부모에게 메세지 보낼 때) 사용! 
             부모가 메세지 수신할 땐 - @작명한 거=""-->
         <h4 @click="$emit('openModal', 원룸.id)">{{ 원룸.title }}</h4>
-        <p @click="send">{{ 원룸.title }}</p>
+
+        <!-- <p @click="send">{{ 원룸.title }}</p> -->
 
         <p>{{ 원룸.price }}원</p>
         <!-- <button @click="increase2[i]">허위매물신고</button> <span>신고수 : {{ 신고수2[i] }}</span> -->

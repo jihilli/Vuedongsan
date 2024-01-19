@@ -9,6 +9,7 @@
            -> 변수 작명 2개까지 가능 : (array내 데이터, 1씩 증가하는 정수)  -->
         <a v-for="(작명, i) in 메뉴들" :key="i">{{ 작명 }}</a>
     </div>
+    <DiscountBanner />
 
     <!-- <조건식 > 
     <div v-if="조건식">안녕하세요</div>
@@ -64,6 +65,7 @@
 // import { apple, apple2 } from "./assets/utils/exampleData.js";
 import data from "./assets/utils/data";
 // import 컴포넌트
+import DiscountBanner from "./components/DiscountBanner.vue";
 import ModalVue from "./components/ModalVue.vue";
 import CardVue from "./components/CardVue.vue";
 
@@ -106,6 +108,7 @@ export default {
     },
     // Script에서 import한 컴포넌트 등록하는 공간
     components: {
+        DiscountBanner: DiscountBanner, // 내맘대로 작명 : import해서 데려온 이름
         ModalVue: ModalVue,
         CardVue: CardVue,
     },
