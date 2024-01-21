@@ -11,6 +11,9 @@
     </div>
     <DiscountBanner />
 
+    <button @click="priceSort">가격순정렬</button>
+    <button @click="sortBack">되돌리기</button>
+
     <!-- <조건식 > 
     <div v-if="조건식">안녕하세요</div>
     <div v-else-if="조건식2">안녕하세요2</div>
@@ -25,7 +28,7 @@
     <!-- < 애니메이션 넣기 > 
         1. {클래스명 : ?} - class명을 조건부로 넣음. ?가 true일 때만 클래스 부여 -->
     <!-- <div class="start" :class="{ end: 모달창열렸니 }"> -->
-    <!-- 2. 효과 주고싶은 요소 <transition name="작명">으로 감싸고, style 활용 -->
+    <!-- 2. 효과 주고 싶은 요소 <transition name="작명">으로 감싸고, style 활용 -->
     <transition name="fade">
         <ModalVue
             @closeModal="모달창열렸니 = $event"
@@ -91,6 +94,8 @@ export default {
             // 모달창 관련 데이터
             모달창열렸니: false,
             원룸들: data,
+            원룸들오리지널: [...data],
+            // -> array/object 데이터의 각각 별개의 사본을 만들 때 사용
             누른거: 0,
         };
     },
@@ -111,6 +116,17 @@ export default {
         selectProduct(i) {
             this.모달창열렸니 = true;
             this.누른거 = i;
+        },
+        priceSort() {
+            this.원룸들.sort(function (a, b) {
+                // sort 함수는 원본이 변형 됨
+                return a.price - b.price;
+            });
+        },
+        sortBack() {
+            // 등호로 array를 집어넣으면 '왼쪽 오른쪽 값을 공유해달라'는 뜻임
+            // 그래서 this.원룸들 = this.원룸들오리지널; 하면 하다가 안됨
+            this.원룸들 = [...this.원룸들오리지널];
         },
     },
     // Script에서 import한 컴포넌트 등록하는 공간
@@ -167,7 +183,7 @@ div {
 }
 
 /* Modal 애니메이션 방법 2 */
-/* 입자 애니메이션 */
+/* 입장 애니메이션 */
 /* 시작 시 스타일 */
 .fade-enter-from {
     opacity: 0;
