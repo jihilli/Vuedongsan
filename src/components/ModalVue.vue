@@ -36,6 +36,7 @@ export default {
             // -> ex. month(a, b) - a : 변경 될 month 데이터 / b : 변경 전 month 데이터
             if (isNaN(a)) {
                 alert("숫자만 입력해주세요");
+                this.month = 1;
             }
         },
     },
@@ -44,7 +45,23 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.black-bg {
+    width: 60%;
+    height: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.white-bg {
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+</style>
 
 <!-- props : 부모도 쓰는 데이터라면, 데이터를 자식컴포넌트에 만들지 않고 부모 컴포넌트에 만들기
 (데이터를 위->아래로 전송하는 건 props 사용하면 쉬운데, 역방향은 어렵기 때문) -->

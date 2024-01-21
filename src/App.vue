@@ -18,15 +18,22 @@
 
     <!-- 모달창 : components & props 
     1. 데이터 보내기 - <자식 :데이터이름(작명)="데이터이름">
-        * :(콜론)의 역할? 1) 속성에서 데이터 바인딩 2)props 보내주기 (v-bind)
+        * :(콜론)의 역할? 1) HTML 속성에서 데이터 바인딩 2)props 보내주기 (v-bind)
     2. 자식컴포넌트는 props로 받은 걸 data에 등록해주기
 ** props로 보내준 데이터는 read-only이므로, 자식컴포넌트가 받아온 props 수정하면 큰일 남! -->
-    <ModalVue
-        @closeModal="모달창열렸니 = $event"
-        v-bind:원룸들="원룸들"
-        :누른거="누른거"
-        :모달창열렸니="모달창열렸니"
-    />
+
+    <!-- < 애니메이션 넣기 > 
+        1. {클래스명 : ?} - class명을 조건부로 넣음. ?가 true일 때만 클래스 부여 -->
+    <!-- <div class="start" :class="{ end: 모달창열렸니 }"> -->
+    <!-- 2. 효과 주고싶은 요소 <transition name="작명">으로 감싸고, style 활용 -->
+    <transition name="fade">
+        <ModalVue
+            @closeModal="모달창열렸니 = $event"
+            v-bind:원룸들="원룸들"
+            :누른거="누른거"
+            :모달창열렸니="모달창열렸니"
+        />
+    </transition>
 
     <!-- 데려온 데이터 활용하기 -->
     <!-- @openModal - 자식이 openModal 이름의 메세지 보내면 JS 실행해주라는 뜻
@@ -128,22 +135,6 @@ div {
     box-sizing: border-box;
 }
 
-.black-bg {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    padding: 20px;
-}
-
-/* 모달창 */
-.white-bg {
-    width: 100%;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-}
-
 /* 상단 Nav 메뉴  */
 .menu {
     background: darkslateblue;
@@ -160,6 +151,47 @@ div {
 .room-img {
     width: 100%;
     margin-top: 40px;
+}
+
+/* Modal 애니메이션 방법 2 */
+/* CSS로 애니메이션 주기
+    1. 시작 전 class명
+    2. 애니메이션 끝난 후 class명
+    3. 그리고 원할 때 2번 class명 부착 */
+.start {
+    opacity: 0;
+    transition: all 1s;
+}
+.end {
+    opacity: 1;
+}
+
+/* Modal 애니메이션 방법 2 */
+/* 입자 애니메이션 */
+/* 시작 시 스타일 */
+.fade-enter-from {
+    opacity: 0;
+}
+/*  */
+.fade-enter-active {
+    transition: all 1s;
+}
+/* 끝날 때 스타일 */
+.fade-enter-to {
+    opacity: 1;
+}
+/* 퇴장 애니메이션 */
+/* 시작 시 스타일 */
+.fade-leave-from {
+    transform: translateY(0px);
+}
+/*  */
+.fade-leave-active {
+    transition: all 1s;
+}
+/* 끝날 때 스타일 */
+.fade-leave-to {
+    transform: translateY(-1000px);
 }
 </style>
 
