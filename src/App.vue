@@ -9,7 +9,7 @@
            -> 변수 작명 2개까지 가능 : (array내 데이터, 1씩 증가하는 정수)  -->
         <a v-for="(작명, i) in 메뉴들" :key="i">{{ 작명 }}</a>
     </div>
-    <DiscountBanner />
+    <DiscountBanner :percent="percent" v-if="showDiscount == true" />
 
     <button @click="priceSort">가격순정렬</button>
     <button @click="sortBack">되돌리기</button>
@@ -23,10 +23,10 @@
     1. 데이터 보내기 - <자식 :데이터이름(작명)="데이터이름">
         * :(콜론)의 역할? 1) HTML 속성에서 데이터 바인딩 2)props 보내주기 (v-bind)
     2. 자식컴포넌트는 props로 받은 걸 data에 등록해주기
-** props로 보내준 데이터는 read-only이므로, 자식컴포넌트가 받아온 props 수정하면 큰일 남! -->
+    ** props로 보내준 데이터는 read-only이므로, 자식컴포넌트가 받아온 props 수정하면 큰일 남! -->
 
     <!-- < 애니메이션 넣기 > 
-        1. {클래스명 : ?} - class명을 조건부로 넣음. ?가 true일 때만 클래스 부여 -->
+         1. {클래스명 : ?} - class명을 조건부로 넣음. ?가 true일 때만 클래스 부여 -->
     <!-- <div class="start" :class="{ end: 모달창열렸니 }"> -->
     <!-- 2. 효과 주고 싶은 요소 <transition name="작명">으로 감싸고, style 활용 -->
     <transition name="fade">
@@ -97,6 +97,9 @@ export default {
             원룸들오리지널: [...data],
             // -> array/object 데이터의 각각 별개의 사본을 만들 때 사용
             누른거: 0,
+            // Lifecycle 관련
+            showDiscount: true,
+            percent: 5,
         };
     },
     // 함수 만드는 공간
@@ -129,6 +132,21 @@ export default {
             this.원룸들 = [...this.원룸들오리지널];
         },
     },
+    // Lifecycle Hook 쓰는 부분
+    // ex) beforeCreate, created, beforeMount, mounted, beforeUpdate, updated, beforeUnmount, unmounted, ...
+    mounted() {
+        // mount 된 후에 함수 사용
+        // setTimeout(() => {
+        //     // * this.데이터 쓸 때는 arrow function으로 해야 에러 안남
+        //     this.showDiscount = false;
+        // }, 2000);
+        setInterval(() => {
+            if (this.percent > 0) {
+                this.percent--;
+            }
+        }, 1000);
+    },
+
     // Script에서 import한 컴포넌트 등록하는 공간
     components: {
         DiscountBanner: DiscountBanner, // 내맘대로 작명 : import해서 데려온 이름
